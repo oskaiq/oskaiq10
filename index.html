@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم المسؤول - سينما بلس</title>
+    <title>🎬 سينما بلس - نظام أفلام متكامل</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ====== المتغيرات والأساسيات ====== */
         :root {
             --primary: #4361ee;
             --secondary: #3a0ca3;
@@ -14,7 +15,10 @@
             --danger: #ef476f;
             --warning: #ffd166;
             --dark: #1a1a2e;
+            --darker: #0f0f23;
             --light: #f8f9fa;
+            --gray: #6c757d;
+            --card-bg: rgba(255, 255, 255, 0.05);
         }
 
         * {
@@ -24,14 +28,72 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--dark);
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: var(--darker);
             color: var(--light);
             min-height: 100vh;
-            overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* شريط التنقل العلوي */
+        /* ====== التمرير المخصص ====== */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
+        }
+
+        /* ====== الأزرار العامة ====== */
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: var(--light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        /* ====== الشريط العلوي ====== */
         .top-nav {
             background: linear-gradient(135deg, var(--dark), var(--secondary));
             padding: 1rem 2rem;
@@ -62,46 +124,219 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
+        /* ====== إخفاء العناصر ====== */
+        .hidden {
+            display: none !important;
         }
 
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
+        /* ====== الصفحات ====== */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+            min-height: calc(100vh - 70px);
         }
 
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            border-radius: 50%;
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ====== الصفحة الرئيسية ====== */
+        #homePage {
+            padding: 0;
+        }
+
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+                        url('https://images.unsplash.com/photo-1489599809516-9827b6d1cf13?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        .movies-section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--accent);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 0;
+            width: 100px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        /* ====== شبكة الأفلام ====== */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .movie-card {
+            background: linear-gradient(135deg, var(--dark), var(--secondary));
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            border-color: var(--accent);
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+
+        .movie-info {
+            padding: 1.5rem;
+        }
+
+        .movie-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--light);
+        }
+
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .movie-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* ====== صفحة دخول المسؤول ====== */
+        #adminLoginPage {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            background: linear-gradient(135deg, var(--dark), var(--secondary));
         }
 
-        .logout-btn {
-            background: rgba(239, 71, 111, 0.2);
-            color: var(--danger);
-            border: 1px solid rgba(239, 71, 111, 0.3);
-            padding: 0.5rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 2rem;
+        }
+
+        .login-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-title i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .login-title h2 {
+            color: var(--light);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: var(--light);
+            font-size: 1rem;
             transition: all 0.3s ease;
         }
 
-        .logout-btn:hover {
-            background: var(--danger);
-            color: white;
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
         }
 
-        /* القائمة الجانبية */
-        .main-container {
+        .alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert-success {
+            background: rgba(76, 201, 240, 0.2);
+            color: var(--success);
+            border: 1px solid rgba(76, 201, 240, 0.3);
+        }
+
+        .alert-danger {
+            background: rgba(239, 71, 111, 0.2);
+            color: var(--danger);
+            border: 1px solid rgba(239, 71, 111, 0.3);
+        }
+
+        /* ====== لوحة تحكم المسؤول ====== */
+        .admin-dashboard {
             display: flex;
             min-height: calc(100vh - 70px);
         }
@@ -136,28 +371,13 @@
             border-right-color: var(--accent);
         }
 
-        /* المحتوى الرئيسي */
-        .content {
+        .admin-content {
             flex: 1;
             padding: 2rem;
+            overflow-y: auto;
         }
 
-        .dashboard-header {
-            margin-bottom: 2rem;
-        }
-
-        .dashboard-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--light);
-        }
-
-        .dashboard-header p {
-            color: var(--accent);
-            font-size: 1.1rem;
-        }
-
-        /* بطاقات الإحصائيات */
+        /* ====== بطاقات الإحصائيات ====== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -201,7 +421,7 @@
             font-size: 0.9rem;
         }
 
-        /* الجداول */
+        /* ====== الجداول ====== */
         .table-container {
             background: linear-gradient(135deg, var(--dark), rgba(67, 97, 238, 0.1));
             border-radius: 15px;
@@ -216,26 +436,8 @@
             margin-bottom: 1.5rem;
         }
 
-        .table-header h2 {
+        .table-header h3 {
             color: var(--light);
-        }
-
-        .action-btn {
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            padding: 0.7rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .action-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
         }
 
         .table {
@@ -261,28 +463,19 @@
             background: rgba(255, 255, 255, 0.02);
         }
 
-        .status-badge {
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
+        /* ====== نموذج إضافة فيلم ====== */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
 
-        .status-active {
-            background: rgba(76, 201, 240, 0.2);
-            color: var(--success);
-        }
-
-        .status-inactive {
-            background: rgba(239, 71, 111, 0.2);
-            color: var(--danger);
-        }
-
-        /* رسائل النظام */
-        .system-alert {
+        /* ====== الإشعارات ====== */
+        .notification {
             position: fixed;
-            top: 80px;
-            right: 20px;
+            bottom: 20px;
+            left: 20px;
             background: var(--success);
             color: white;
             padding: 1rem 2rem;
@@ -296,13 +489,28 @@
         }
 
         @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
+            from { transform: translateX(-100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
 
-        /* التصميم المتجاوب */
-        @media (max-width: 992px) {
-            .main-container {
+        /* ====== الفوتر ====== */
+        footer {
+            background: var(--dark);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 2px solid var(--accent);
+        }
+
+        .copyright {
+            color: var(--gray);
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+
+        /* ====== التصميم المتجاوب ====== */
+        @media (max-width: 1200px) {
+            .admin-dashboard {
                 flex-direction: column;
             }
             
@@ -314,31 +522,73 @@
             .nav-menu {
                 display: flex;
                 overflow-x: auto;
-                gap: 0.5rem;
+                gap: 1rem;
             }
             
             .nav-item {
                 flex-direction: column;
-                padding: 0.5rem;
-                min-width: 80px;
+                padding: 0.5rem 1rem;
+                min-width: 100px;
                 text-align: center;
-                font-size: 0.9rem;
             }
         }
 
         @media (max-width: 768px) {
-            .stats-grid {
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-section {
+                padding: 4rem 1rem;
+            }
+            
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .form-row {
                 grid-template-columns: 1fr;
             }
             
             .table-header {
                 flex-direction: column;
                 gap: 1rem;
+                align-items: flex-start;
             }
             
             .table {
                 display: block;
                 overflow-x: auto;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .login-container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .top-nav {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+            
+            .movies-section {
+                padding: 2rem 1rem;
             }
         }
     </style>
@@ -351,419 +601,1015 @@
             <span>سينما بلس</span>
         </div>
         
-        <div class="user-menu">
-            <div class="user-info">
-                <div class="user-avatar" id="userAvatar">
-                    <!-- سيتم ملؤها بـ JavaScript -->
-                </div>
-                <div>
-                    <div id="userRole">مدير النظام</div>
-                    <div style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.7);" id="userName"></div>
-                </div>
-            </div>
-            
-            <button class="logout-btn" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+        <div class="nav-buttons">
+            <button id="homeBtn" class="btn btn-primary">
+                <i class="fas fa-home"></i> الرئيسية
+            </button>
+            <button id="adminBtn" class="btn btn-secondary">
+                <i class="fas fa-user-shield"></i> دخول المسؤول
             </button>
         </div>
     </nav>
 
-    <!-- الهيكل الرئيسي -->
-    <div class="main-container">
-        <!-- القائمة الجانبية -->
-        <aside class="sidebar">
-            <ul class="nav-menu">
-                <li class="nav-item active" onclick="showSection('dashboard')">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>اللوحة الرئيسية</span>
-                </li>
-                <li class="nav-item" onclick="showSection('movies')">
-                    <i class="fas fa-video"></i>
-                    <span>الأفلام</span>
-                </li>
-                <li class="nav-item" onclick="showSection('users')">
-                    <i class="fas fa-users"></i>
-                    <span>المستخدمين</span>
-                </li>
-                <li class="nav-item" onclick="showSection('reports')">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>التقارير</span>
-                </li>
-                <li class="nav-item" onclick="showSection('settings')">
-                    <i class="fas fa-cog"></i>
-                    <span>الإعدادات</span>
-                </li>
-                <li class="nav-item" onclick="showSection('logs')">
-                    <i class="fas fa-history"></i>
-                    <span>سجلات النظام</span>
-                </li>
-            </ul>
-        </aside>
+    <!-- الصفحة الرئيسية -->
+    <div id="homePage" class="page active">
+        <section class="hero-section">
+            <h1>🎬 سينما بلس</h1>
+            <p>أكبر مكتبة أفلام عربية وعالمية - شاهد أحدث الأفلام بجودة عالية</p>
+            <button class="btn btn-primary" style="padding: 1rem 2.5rem; font-size: 1.1rem;">
+                <i class="fas fa-play"></i> ابدأ المشاهدة
+            </button>
+        </section>
 
-        <!-- المحتوى الرئيسي -->
-        <main class="content">
-            <!-- اللوحة الرئيسية -->
-            <section id="dashboard" class="dashboard-section">
-                <div class="dashboard-header">
-                    <h1>لوحة تحكم المسؤول</h1>
-                    <p id="welcomeMessage">مرحباً بك في نظام إدارة الأفلام</p>
-                </div>
-                
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: rgba(67, 97, 238, 0.2); color: var(--primary);">
-                            <i class="fas fa-film"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3 id="totalMovies">0</h3>
-                            <p>إجمالي الأفلام</p>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: rgba(76, 201, 240, 0.2); color: var(--success);">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3 id="totalUsers">0</h3>
-                            <p>المستخدمين المسجلين</p>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: rgba(247, 37, 133, 0.2); color: var(--accent);">
-                            <i class="fas fa-eye"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3 id="totalViews">0</h3>
-                            <p>إجمالي المشاهدات</p>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: rgba(255, 209, 102, 0.2); color: var(--warning);">
-                            <i class="fas fa-money-bill-wave"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3 id="totalRevenue">0 ريال</h3>
-                            <p>الإيرادات الشهرية</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- جدول النشاط الأخير -->
-                <div class="table-container">
-                    <div class="table-header">
-                        <h2>النشاط الأخير</h2>
-                        <button class="action-btn" onclick="refreshData()">
-                            <i class="fas fa-sync-alt"></i> تحديث
-                        </button>
-                    </div>
-                    
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>المستخدم</th>
-                                <th>النشاط</th>
-                                <th>التاريخ</th>
-                                <th>الحالة</th>
-                            </tr>
-                        </thead>
-                        <tbody id="activityTable">
-                            <!-- سيتم ملؤها بـ JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        </main>
+        <section class="movies-section">
+            <h2 class="section-title">الأفلام المميزة</h2>
+            <div class="movies-grid" id="moviesGrid">
+                <!-- الأفلام ستضاف هنا -->
+            </div>
+        </section>
+
+        <footer>
+            <div class="logo" style="justify-content: center; margin-bottom: 2rem;">
+                <i class="fas fa-film"></i>
+                <span>سينما بلس</span>
+            </div>
+            <p>منصة ترفيهية رائدة تقدم أفضل المحتويات السينمائية</p>
+            <div class="copyright">
+                <p>© 2024 سينما بلس - موقع تعليمي للعرض فقط</p>
+                <p>جميع العلامات التجارية مملوكة لأصحابها</p>
+            </div>
+        </footer>
     </div>
-    
-    <!-- رسالة النظام -->
-    <div class="system-alert" id="systemAlert">
+
+    <!-- صفحة دخول المسؤول -->
+    <div id="adminLoginPage" class="page">
+        <div class="login-container">
+            <div class="login-title">
+                <i class="fas fa-user-shield"></i>
+                <h2>لوحة تحكم المسؤول</h2>
+                <p style="color: var(--gray);">أدخل بيانات الدخول للوصول إلى لوحة التحكم</p>
+            </div>
+            
+            <div class="alert alert-success" id="successAlert">
+                <i class="fas fa-check-circle"></i>
+                <span id="successText"></span>
+            </div>
+            
+            <div class="alert alert-danger" id="errorAlert">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="errorText"></span>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">اسم المستخدم</label>
+                    <input type="text" id="username" class="form-control" placeholder="أدخل اسم المستخدم" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">كلمة المرور</label>
+                    <input type="password" id="password" class="form-control" placeholder="أدخل كلمة المرور" required>
+                </div>
+                
+                <div class="form-group" style="display: flex; gap: 1rem;">
+                    <button type="button" class="btn btn-secondary" onclick="testLogin('admin')" style="flex: 1;">
+                        <i class="fas fa-user-shield"></i> مسؤول
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="testLogin('moderator')" style="flex: 1;">
+                        <i class="fas fa-user-cog"></i> مشرف
+                    </button>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+                </button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-secondary" onclick="showPage('homePage')">
+                    <i class="fas fa-arrow-right"></i> العودة للرئيسية
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- لوحة تحكم المسؤول -->
+    <div id="adminDashboardPage" class="page">
+        <div class="admin-dashboard">
+            <!-- القائمة الجانبية -->
+            <aside class="sidebar">
+                <ul class="nav-menu">
+                    <li class="nav-item active" onclick="showAdminSection('dashboard')">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>اللوحة الرئيسية</span>
+                    </li>
+                    <li class="nav-item" onclick="showAdminSection('movies')">
+                        <i class="fas fa-video"></i>
+                        <span>إدارة الأفلام</span>
+                    </li>
+                    <li class="nav-item" onclick="showAdminSection('users')">
+                        <i class="fas fa-users"></i>
+                        <span>إدارة المستخدمين</span>
+                    </li>
+                    <li class="nav-item" onclick="showAdminSection('reports')">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>التقارير</span>
+                    </li>
+                    <li class="nav-item" onclick="showAdminSection('settings')">
+                        <i class="fas fa-cog"></i>
+                        <span>الإعدادات</span>
+                    </li>
+                    <li class="nav-item" onclick="adminLogout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>تسجيل الخروج</span>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- المحتوى الرئيسي -->
+            <main class="admin-content">
+                <!-- قسم اللوحة الرئيسية -->
+                <div id="adminDashboardSection" class="admin-section">
+                    <h2 style="margin-bottom: 2rem; font-size: 2.5rem;">لوحة تحكم المسؤول</h2>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="color: var(--primary);">
+                                <i class="fas fa-film"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalMoviesStat">0</h3>
+                                <p>إجمالي الأفلام</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon" style="color: var(--success);">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalUsersStat">0</h3>
+                                <p>المستخدمين المسجلين</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon" style="color: var(--accent);">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalViewsStat">0</h3>
+                                <p>إجمالي المشاهدات</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon" style="color: var(--warning);">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalRevenueStat">0</h3>
+                                <p>الإيرادات الشهرية</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3>آخر الأفلام المضافة</h3>
+                            <button class="btn btn-primary" onclick="showAdminSection('movies')">
+                                <i class="fas fa-plus"></i> إضافة فيلم جديد
+                            </button>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>اسم الفيلم</th>
+                                    <th>السنة</th>
+                                    <th>التقييم</th>
+                                    <th>الحالة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentMoviesTable">
+                                <!-- سيتم ملؤها -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- قسم إدارة الأفلام -->
+                <div id="adminMoviesSection" class="admin-section hidden">
+                    <h2 style="margin-bottom: 2rem; font-size: 2.5rem;">إدارة الأفلام</h2>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3>جميع الأفلام</h3>
+                            <button class="btn btn-primary" onclick="showAddMovieModal()">
+                                <i class="fas fa-plus"></i> فيلم جديد
+                            </button>
+                        </div>
+                        
+                        <div class="movies-grid" id="adminMoviesGrid">
+                            <!-- سيتم ملؤها -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- قسم إدارة المستخدمين -->
+                <div id="adminUsersSection" class="admin-section hidden">
+                    <h2 style="margin-bottom: 2rem; font-size: 2.5rem;">إدارة المستخدمين</h2>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3>المستخدمين المسجلين</h3>
+                            <button class="btn btn-primary" onclick="showAddUserModal()">
+                                <i class="fas fa-user-plus"></i> إضافة مستخدم
+                            </button>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>المستخدم</th>
+                                    <th>البريد الإلكتروني</th>
+                                    <th>نوع العضوية</th>
+                                    <th>الحالة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTable">
+                                <!-- سيتم ملؤها -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- قسم التقارير -->
+                <div id="adminReportsSection" class="admin-section hidden">
+                    <h2 style="margin-bottom: 2rem; font-size: 2.5rem;">التقارير والإحصائيات</h2>
+                    
+                    <div class="table-container">
+                        <h3 style="margin-bottom: 1.5rem;">تقارير مفصلة</h3>
+                        <div style="text-align: center; padding: 4rem; color: var(--gray);">
+                            <i class="fas fa-chart-line" style="font-size: 4rem; margin-bottom: 2rem;"></i>
+                            <p>قسم التقارير قيد التطوير</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- قسم الإعدادات -->
+                <div id="adminSettingsSection" class="admin-section hidden">
+                    <h2 style="margin-bottom: 2rem; font-size: 2.5rem;">إعدادات النظام</h2>
+                    
+                    <div class="table-container">
+                        <h3 style="margin-bottom: 1.5rem;">الإعدادات العامة</h3>
+                        <div style="text-align: center; padding: 4rem; color: var(--gray);">
+                            <i class="fas fa-cog fa-spin" style="font-size: 4rem; margin-bottom: 2rem;"></i>
+                            <p>قسم الإعدادات قيد التطوير</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- نافذة إضافة فيلم -->
+    <div id="addMovieModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 3000; align-items: center; justify-content: center;">
+        <div style="background: var(--dark); padding: 2rem; border-radius: 20px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h3 style="color: var(--light);">إضافة فيلم جديد</h3>
+                <button onclick="closeModal()" style="background: none; border: none; color: var(--gray); font-size: 1.5rem; cursor: pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="addMovieForm">
+                <div class="form-group">
+                    <label>اسم الفيلم *</label>
+                    <input type="text" id="movieTitle" class="form-control" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>سنة الإصدار *</label>
+                        <input type="number" id="movieYear" class="form-control" min="1900" max="2024" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>التقييم (من 10)</label>
+                        <input type="number" id="movieRating" class="form-control" min="0" max="10" step="0.1">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>وصف الفيلم</label>
+                    <textarea id="movieDescription" class="form-control" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>رابط الصورة</label>
+                    <input type="url" id="movieImage" class="form-control" placeholder="https://example.com/poster.jpg">
+                </div>
+                
+                <div class="form-group">
+                    <label>التصنيف</label>
+                    <select id="movieCategory" class="form-control">
+                        <option value="">اختر التصنيف</option>
+                        <option value="action">أكشن</option>
+                        <option value="drama">دراما</option>
+                        <option value="comedy">كوميديا</option>
+                        <option value="romance">رومانسي</option>
+                    </select>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()" style="flex: 1;">إلغاء</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">حفظ الفيلم</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة إضافة مستخدم -->
+    <div id="addUserModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 3000; align-items: center; justify-content: center;">
+        <div style="background: var(--dark); padding: 2rem; border-radius: 20px; width: 90%; max-width: 500px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h3 style="color: var(--light);">إضافة مستخدم جديد</h3>
+                <button onclick="closeModal()" style="background: none; border: none; color: var(--gray); font-size: 1.5rem; cursor: pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="addUserForm">
+                <div class="form-group">
+                    <label>اسم المستخدم *</label>
+                    <input type="text" id="userName" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>البريد الإلكتروني *</label>
+                    <input type="email" id="userEmail" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>كلمة المرور *</label>
+                    <input type="password" id="userPassword" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>نوع المستخدم</label>
+                    <select id="userRole" class="form-control">
+                        <option value="user">مستخدم عادي</option>
+                        <option value="moderator">مشرف</option>
+                        <option value="admin">مسؤول</option>
+                    </select>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()" style="flex: 1;">إلغاء</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">حفظ المستخدم</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- إشعارات -->
+    <div class="notification" id="notification">
         <i class="fas fa-check-circle"></i>
-        <span id="alertText"></span>
+        <span id="notificationText"></span>
     </div>
 
     <script>
-        // ============== إدارة الجلسة ==============
-        const sessionManager = {
-            currentUser: null,
-            
-            init: function() {
-                const sessionData = JSON.parse(localStorage.getItem('adminSession'));
-                if (!sessionData) {
-                    this.redirectToLogin();
-                    return;
+        // ============== نظام التخزين ==============
+        const storage = {
+            // بيانات المسؤولين
+            adminUsers: [
+                {
+                    id: 1,
+                    username: 'admin',
+                    password: 'admin123',
+                    role: 'admin',
+                    email: 'admin@cinema.com',
+                    status: 'active'
+                },
+                {
+                    id: 2,
+                    username: 'moderator',
+                    password: 'mod123',
+                    role: 'moderator',
+                    email: 'mod@cinema.com',
+                    status: 'active'
                 }
+            ],
+
+            // بيانات الأفلام الافتراضية
+            movies: [
+                {
+                    id: 1,
+                    title: "الطريق إلى المجد",
+                    year: 2023,
+                    rating: 8.7,
+                    category: "drama",
+                    description: "قصة إنسانية مؤثرة عن شاب يكافح من أجل تحقيق حلمه في عالم الفن.",
+                    image: "https://images.unsplash.com/photo-1595769812725-4c6564f7528b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                    views: 12500,
+                    status: "active"
+                },
+                {
+                    id: 2,
+                    title: "العميل السري",
+                    year: 2024,
+                    rating: 9.2,
+                    category: "action",
+                    description: "مهمة خطيرة، عميل سري، ومؤامرة عالمية تهدد أمن العالم.",
+                    image: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                    views: 18700,
+                    status: "active"
+                },
+                {
+                    id: 3,
+                    title: "ليالي القاهرة",
+                    year: 2022,
+                    rating: 7.9,
+                    category: "comedy",
+                    description: "كوميديا رومانسية تجري أحداثها في شوارع القاهرة العتيقة.",
+                    image: "https://images.unsplash.com/photo-1542204165-65bf26472b9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                    views: 8900,
+                    status: "active"
+                },
+                {
+                    id: 4,
+                    title: "الفارس الأخير",
+                    year: 2023,
+                    rating: 8.5,
+                    category: "action",
+                    description: "ملحمة تاريخية عن الفارس الذي دافع عن مملكته حتى آخر نفس.",
+                    image: "https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                    views: 15200,
+                    status: "active"
+                }
+            ],
+
+            // المستخدمين العاديين
+            users: [
+                {
+                    id: 1,
+                    name: "أحمد محمد",
+                    email: "ahmed@example.com",
+                    role: "user",
+                    status: "active",
+                    joinDate: "2024-01-15"
+                },
+                {
+                    id: 2,
+                    name: "سارة أحمد",
+                    email: "sara@example.com",
+                    role: "user",
+                    status: "active",
+                    joinDate: "2024-02-20"
+                }
+            ],
+
+            // جلسة المستخدم الحالي
+            currentSession: null,
+
+            // تحميل البيانات من localStorage
+            loadData: function() {
+                const savedMovies = localStorage.getItem('cinemaMovies');
+                const savedUsers = localStorage.getItem('cinemaUsers');
+                const savedSession = localStorage.getItem('cinemaSession');
+
+                if (savedMovies) this.movies = JSON.parse(savedMovies);
+                if (savedUsers) this.users = JSON.parse(savedUsers);
+                if (savedSession) this.currentSession = JSON.parse(savedSession);
+            },
+
+            // حفظ البيانات في localStorage
+            saveData: function() {
+                localStorage.setItem('cinemaMovies', JSON.stringify(this.movies));
+                localStorage.setItem('cinemaUsers', JSON.stringify(this.users));
+                if (this.currentSession) {
+                    localStorage.setItem('cinemaSession', JSON.stringify(this.currentSession));
+                }
+            },
+
+            // بدء الجلسة
+            startSession: function(user) {
+                this.currentSession = {
+                    user: user,
+                    timestamp: new Date().getTime(),
+                    expiry: 24 * 60 * 60 * 1000 // 24 ساعة
+                };
+                this.saveData();
+            },
+
+            // التحقق من الجلسة
+            checkSession: function() {
+                if (!this.currentSession) return false;
                 
-                // التحقق من انتهاء صلاحية الجلسة
                 const now = new Date().getTime();
-                if (now - sessionData.timestamp > sessionData.expiry) {
-                    this.clearSession();
-                    this.redirectToLogin();
-                    return;
+                if (now - this.currentSession.timestamp > this.currentSession.expiry) {
+                    this.endSession();
+                    return false;
                 }
                 
-                this.currentUser = sessionData.user;
-                this.updateUI();
-                this.logAccess();
+                return true;
             },
-            
-            updateUI: function() {
-                if (!this.currentUser) return;
-                
-                // تحديث معلومات المستخدم
-                document.getElementById('userAvatar').textContent = 
-                    this.currentUser.username.charAt(0).toUpperCase();
-                document.getElementById('userRole').textContent = this.currentUser.role;
-                document.getElementById('userName').textContent = this.currentUser.username;
-                document.getElementById('welcomeMessage').textContent = 
-                    `مرحباً بك ${this.currentUser.role} - ${this.currentUser.username}`;
-            },
-            
-            logout: function() {
-                this.clearSession();
-                this.redirectToLogin();
-            },
-            
-            clearSession: function() {
-                localStorage.removeItem('adminSession');
-                this.currentUser = null;
-            },
-            
-            redirectToLogin: function() {
-                window.location.href = 'index.html';
-            },
-            
-            logAccess: function() {
-                const accessLogs = JSON.parse(localStorage.getItem('accessLogs')) || [];
-                accessLogs.push({
-                    user: this.currentUser.username,
-                    role: this.currentUser.role,
-                    timestamp: new Date().toISOString(),
-                    action: 'دخول إلى لوحة التحكم'
-                });
-                
-                if (accessLogs.length > 100) accessLogs.shift();
-                localStorage.setItem('accessLogs', JSON.stringify(accessLogs));
-            },
-            
-            hasPermission: function(permission) {
-                if (!this.currentUser) return false;
-                if (this.currentUser.permissions.includes('all')) return true;
-                return this.currentUser.permissions.includes(permission);
+
+            // إنهاء الجلسة
+            endSession: function() {
+                this.currentSession = null;
+                localStorage.removeItem('cinemaSession');
             }
         };
 
         // ============== وظائف العرض ==============
-        function showAlert(message, type = 'success') {
-            const alert = document.getElementById('systemAlert');
-            const text = document.getElementById('alertText');
+        function showPage(pageId) {
+            // إخفاء جميع الصفحات
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
             
-            alert.style.background = type === 'success' ? 'var(--success)' : 
-                                    type === 'error' ? 'var(--danger)' : 
-                                    'var(--warning)';
-            text.textContent = message;
-            alert.style.display = 'flex';
+            // إظهار الصفحة المطلوبة
+            document.getElementById(pageId).classList.add('active');
             
-            setTimeout(() => {
-                alert.style.display = 'none';
-            }, 3000);
+            // تحديث البيانات حسب الصفحة
+            if (pageId === 'homePage') {
+                loadHomePage();
+            } else if (pageId === 'adminDashboardPage') {
+                if (!storage.checkSession()) {
+                    showPage('adminLoginPage');
+                    return;
+                }
+                loadAdminDashboard();
+            }
         }
 
-        function showSection(sectionId) {
-            // تحديد العنصر النشط
+        function showAdminSection(sectionId) {
+            // إخفاء جميع الأقسام
+            document.querySelectorAll('.admin-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // إظهار القسم المطلوب
+            document.getElementById('admin' + sectionId.charAt(0).toUpperCase() + sectionId.slice(1) + 'Section').classList.remove('hidden');
+            
+            // تحديث القائمة النشطة
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
-            event.target.classList.add('active');
             
-            // في الواقع، هنا ستقوم بإظهار وإخفاء الأقسام
-            showAlert(`تم التبديل إلى قسم ${sectionId}`);
-        }
-
-        function logout() {
-            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
-                sessionManager.logout();
+            // إيجاد العنصر النشط
+            const activeItem = Array.from(document.querySelectorAll('.nav-item')).find(item => 
+                item.textContent.includes(getSectionName(sectionId))
+            );
+            if (activeItem) activeItem.classList.add('active');
+            
+            // تحميل بيانات القسم
+            if (sectionId === 'dashboard') {
+                loadAdminStats();
+            } else if (sectionId === 'movies') {
+                loadAdminMovies();
+            } else if (sectionId === 'users') {
+                loadAdminUsers();
             }
         }
 
-        // ============== تحميل البيانات ==============
-        function loadDashboardData() {
-            // تحميل البيانات من localStorage
-            const movies = JSON.parse(localStorage.getItem('moviesDatabase')) || [];
-            const users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
-            const logs = JSON.parse(localStorage.getItem('accessLogs')) || [];
-            
-            // تحديث الإحصائيات
-            document.getElementById('totalMovies').textContent = movies.length;
-            document.getElementById('totalUsers').textContent = users.length;
-            document.getElementById('totalViews').textContent = 
-                movies.reduce((sum, movie) => sum + (movie.views || 0), 0).toLocaleString();
-            document.getElementById('totalRevenue').textContent = 
-                (movies.length * 1500).toLocaleString() + ' ريال';
-            
-            // تحديث جدول النشاط
-            updateActivityTable(logs.slice(-5).reverse());
+        function getSectionName(sectionId) {
+            const sections = {
+                'dashboard': 'اللوحة الرئيسية',
+                'movies': 'إدارة الأفلام',
+                'users': 'إدارة المستخدمين',
+                'reports': 'التقارير',
+                'settings': 'الإعدادات'
+            };
+            return sections[sectionId] || sectionId;
         }
 
-        function updateActivityTable(logs) {
-            const tbody = document.getElementById('activityTable');
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notificationText');
+            
+            notification.style.background = type === 'success' ? 'var(--success)' : 
+                                          type === 'error' ? 'var(--danger)' : 
+                                          'var(--warning)';
+            text.textContent = message;
+            notification.style.display = 'flex';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+
+        // ============== الصفحة الرئيسية ==============
+        function loadHomePage() {
+            const grid = document.getElementById('moviesGrid');
+            grid.innerHTML = '';
+            
+            storage.movies.slice(0, 6).forEach(movie => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.innerHTML = `
+                    <img src="${movie.image}" alt="${movie.title}" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">${movie.title} (${movie.year})</h3>
+                        <div class="movie-meta">
+                            <span>⭐ ${movie.rating}/10</span>
+                            <span>${getCategoryName(movie.category)}</span>
+                        </div>
+                        <p class="movie-description">${movie.description}</p>
+                        <button class="btn btn-primary" onclick="watchMovie(${movie.id})" style="width: 100%;">
+                            <i class="fas fa-play"></i> مشاهدة الفيلم
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function getCategoryName(category) {
+            const categories = {
+                'action': 'أكشن',
+                'drama': 'دراما',
+                'comedy': 'كوميديا',
+                'romance': 'رومانسي'
+            };
+            return categories[category] || category;
+        }
+
+        function watchMovie(movieId) {
+            const movie = storage.movies.find(m => m.id === movieId);
+            if (movie) {
+                movie.views = (movie.views || 0) + 1;
+                storage.saveData();
+                
+                alert(`🎬 ${movie.title}\n\nهذا موقع تعليمي للعرض فقط.\n\nفي موقع حقيقي، سيتم عرض الفيلم هنا.`);
+                showNotification(`شاهدت: ${movie.title}`);
+            }
+        }
+
+        // ============== صفحة دخول المسؤول ==============
+        function testLogin(role) {
+            let username, password;
+            
+            if (role === 'admin') {
+                username = 'admin';
+                password = 'admin123';
+            } else if (role === 'moderator') {
+                username = 'moderator';
+                password = 'mod123';
+            }
+            
+            document.getElementById('username').value = username;
+            document.getElementById('password').value = password;
+            
+            showAlert(`تم تعبئة بيانات ${role}`, 'success');
+        }
+
+        function showAlert(message, type = 'success') {
+            const alertDiv = type === 'success' ? document.getElementById('successAlert') : document.getElementById('errorAlert');
+            const textSpan = type === 'success' ? document.getElementById('successText') : document.getElementById('errorText');
+            
+            // إخفاء جميع التنبيهات أولاً
+            document.getElementById('successAlert').style.display = 'none';
+            document.getElementById('errorAlert').style.display = 'none';
+            
+            // عرض التنبيه المطلوب
+            textSpan.textContent = message;
+            alertDiv.style.display = 'block';
+            
+            // إخفاء التنبيه بعد 3 ثواني
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            // البحث عن المستخدم
+            const user = storage.adminUsers.find(u => 
+                u.username === username && u.password === password
+            );
+            
+            if (user) {
+                if (user.status !== 'active') {
+                    showAlert('هذا الحساب غير مفعل', 'error');
+                    return;
+                }
+                
+                // بدء الجلسة
+                storage.startSession(user);
+                
+                // عرض رسالة نجاح
+                showAlert(`مرحباً ${user.role}! جاري تحويلك...`, 'success');
+                
+                // الانتقال إلى لوحة التحكم
+                setTimeout(() => {
+                    showPage('adminDashboardPage');
+                }, 1500);
+            } else {
+                showAlert('اسم المستخدم أو كلمة المرور غير صحيحة', 'error');
+            }
+        });
+
+        // ============== لوحة تحكم المسؤول ==============
+        function loadAdminDashboard() {
+            loadAdminStats();
+            loadRecentMovies();
+            showAdminSection('dashboard');
+        }
+
+        function loadAdminStats() {
+            document.getElementById('totalMoviesStat').textContent = storage.movies.length;
+            document.getElementById('totalUsersStat').textContent = storage.users.length;
+            document.getElementById('totalViewsStat').textContent = 
+                storage.movies.reduce((sum, movie) => sum + (movie.views || 0), 0).toLocaleString();
+            document.getElementById('totalRevenueStat').textContent = 
+                (storage.movies.length * 1500).toLocaleString() + ' ريال';
+        }
+
+        function loadRecentMovies() {
+            const tbody = document.getElementById('recentMoviesTable');
             tbody.innerHTML = '';
             
-            logs.forEach(log => {
+            storage.movies.slice(-5).reverse().forEach(movie => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><strong>${log.user}</strong><br><small>${log.role}</small></td>
-                    <td>${log.action}</td>
-                    <td>${new Date(log.timestamp).toLocaleString('ar-EG')}</td>
-                    <td><span class="status-badge status-active">نشط</span></td>
+                    <td><strong>${movie.title}</strong></td>
+                    <td>${movie.year}</td>
+                    <td>⭐ ${movie.rating}/10</td>
+                    <td><span style="color: var(--success);">${movie.status === 'active' ? 'نشط' : 'غير نشط'}</span></td>
+                    <td>
+                        <button class="btn" style="padding: 0.5rem; background: rgba(76,201,240,0.2); color: var(--success);" onclick="editMovie(${movie.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn" style="padding: 0.5rem; background: rgba(239,71,111,0.2); color: var(--danger); margin-right: 0.5rem;" onclick="deleteMovie(${movie.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
                 `;
                 tbody.appendChild(row);
             });
+        }
+
+        function loadAdminMovies() {
+            const grid = document.getElementById('adminMoviesGrid');
+            grid.innerHTML = '';
             
-            if (logs.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="4" style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.5);">
-                            لا توجد أنشطة مسجلة
-                        </td>
-                    </tr>
+            storage.movies.forEach(movie => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.innerHTML = `
+                    <img src="${movie.image}" alt="${movie.title}" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">${movie.title} (${movie.year})</h3>
+                        <div class="movie-meta">
+                            <span>⭐ ${movie.rating}/10</span>
+                            <span>${getCategoryName(movie.category)}</span>
+                            <span>👁️ ${movie.views.toLocaleString()}</span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <button class="btn btn-primary" style="flex: 1;" onclick="editMovie(${movie.id})">
+                                <i class="fas fa-edit"></i> تعديل
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteMovie(${movie.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
                 `;
-            }
+                grid.appendChild(card);
+            });
         }
 
-        function refreshData() {
-            loadDashboardData();
-            showAlert('تم تحديث البيانات بنجاح');
+        function loadAdminUsers() {
+            const tbody = document.getElementById('usersTable');
+            tbody.innerHTML = '';
+            
+            storage.users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(45deg, var(--primary), var(--accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                ${user.name.charAt(0)}
+                            </div>
+                            ${user.name}
+                        </div>
+                    </td>
+                    <td>${user.email}</td>
+                    <td>${user.role === 'admin' ? 'مسؤول' : user.role === 'moderator' ? 'مشرف' : 'مستخدم'}</td>
+                    <td><span style="color: ${user.status === 'active' ? 'var(--success)' : 'var(--danger)'};">${user.status === 'active' ? 'نشط' : 'غير نشط'}</span></td>
+                    <td>
+                        <button class="btn" style="padding: 0.5rem; background: rgba(76,201,240,0.2); color: var(--success);">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
         }
 
-        // ============== حماية الصفحة ==============
-        function protectPage() {
-            // منع فتح أدوات المطورين
-            document.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-            });
-
-            // منع النسخ
-            document.addEventListener('copy', function(e) {
-                e.preventDefault();
-                showAlert('ممنوع نسخ المحتوى', 'error');
-            });
-
-            // التحذير عند الخروج
-            window.addEventListener('beforeunload', function(e) {
-                if (sessionManager.currentUser) {
-                    e.preventDefault();
-                    e.returnValue = 'هل أنت متأكد من الخروج من لوحة التحكم؟';
-                }
-            });
-
-            // التحقق من الجلسة كل 30 ثانية
-            setInterval(() => {
-                if (!localStorage.getItem('adminSession')) {
-                    sessionManager.redirectToLogin();
-                }
-            }, 30000);
+        function showAddMovieModal() {
+            document.getElementById('addMovieForm').reset();
+            showModal('addMovieModal');
         }
 
-        // ============== التهيئة ==============
-        document.addEventListener('DOMContentLoaded', function() {
-            // تحميل الجلسة
-            sessionManager.init();
+        function showAddUserModal() {
+            document.getElementById('addUserForm').reset();
+            showModal('addUserModal');
+        }
+
+        document.getElementById('addMovieForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            // إذا لم يكن هناك مستخدم، توجيه للدخول
-            if (!sessionManager.currentUser) {
-                return;
-            }
+            const newMovie = {
+                id: Date.now(),
+                title: document.getElementById('movieTitle').value,
+                year: parseInt(document.getElementById('movieYear').value),
+                rating: parseFloat(document.getElementById('movieRating').value) || 8.0,
+                category: document.getElementById('movieCategory').value || 'drama',
+                description: document.getElementById('movieDescription').value || 'لا يوجد وصف',
+                image: document.getElementById('movieImage').value || 'https://images.unsplash.com/photo-1489599809516-9827b6d1cf13?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                views: 0,
+                status: 'active'
+            };
             
-            // تحميل البيانات
-            loadDashboardData();
+            storage.movies.push(newMovie);
+            storage.saveData();
             
-            // حماية الصفحة
-            protectPage();
+            closeModal();
+            loadAdminMovies();
+            loadRecentMovies();
+            loadAdminStats();
+            loadHomePage();
             
-            // عرض رسالة ترحيب
-            setTimeout(() => {
-                showAlert(`مرحباً بك ${sessionManager.currentUser.role}!`);
-            }, 1000);
-            
-            // تحديث الوقت الحقيقي
-            setInterval(() => {
-                const now = new Date();
-                document.title = `لوحة التحكم | ${now.toLocaleTimeString('ar-EG')}`;
-            }, 1000);
+            showNotification('تم إضافة الفيلم بنجاح');
         });
 
-        // ============== أزرار النظام ==============
-        // إضافة مستخدم جديد
-        function addNewUser() {
-            if (!sessionManager.hasPermission('users')) {
-                showAlert('ليس لديك صلاحية لإضافة مستخدمين', 'error');
-                return;
-            }
+        document.getElementById('addUserForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            const username = prompt('أدخل اسم المستخدم الجديد:');
-            if (!username) return;
-            
-            const password = prompt('أدخل كلمة المرور:');
-            if (!password) return;
-            
-            const role = prompt('أدخل الدور (admin/moderator/editor):');
-            
-            // حفظ المستخدم الجديد
-            const users = JSON.parse(localStorage.getItem('adminUsers')) || [];
-            users.push({
+            const newUser = {
                 id: Date.now(),
-                username: username,
-                password: password,
-                role: role,
-                permissions: role === 'admin' ? ['all'] : ['movies', 'content'],
-                status: 'active'
-            });
+                name: document.getElementById('userName').value,
+                email: document.getElementById('userEmail').value,
+                role: document.getElementById('userRole').value,
+                status: 'active',
+                joinDate: new Date().toISOString().split('T')[0]
+            };
             
-            localStorage.setItem('adminUsers', JSON.stringify(users));
-            showAlert(`تم إضافة المستخدم ${username} بنجاح`);
-            refreshData();
+            storage.users.push(newUser);
+            storage.saveData();
+            
+            closeModal();
+            loadAdminUsers();
+            loadAdminStats();
+            
+            showNotification('تم إضافة المستخدم بنجاح');
+        });
+
+        function editMovie(movieId) {
+            const movie = storage.movies.find(m => m.id === movieId);
+            if (movie) {
+                document.getElementById('movieTitle').value = movie.title;
+                document.getElementById('movieYear').value = movie.year;
+                document.getElementById('movieRating').value = movie.rating;
+                document.getElementById('movieDescription').value = movie.description;
+                document.getElementById('movieImage').value = movie.image;
+                document.getElementById('movieCategory').value = movie.category;
+                
+                showModal('addMovieModal');
+                
+                // تغيير النص والعمل
+                document.querySelector('#addMovieModal h3').textContent = 'تعديل الفيلم';
+                document.querySelector('#addMovieModal button[type="submit"]').textContent = 'تحديث الفيلم';
+                
+                // تغيير الإرسال للتحديث
+                const form = document.getElementById('addMovieForm');
+                form.onsubmit = function(e) {
+                    e.preventDefault();
+                    
+                    movie.title = document.getElementById('movieTitle').value;
+                    movie.year = parseInt(document.getElementById('movieYear').value);
+                    movie.rating = parseFloat(document.getElementById('movieRating').value) || 8.0;
+                    movie.category = document.getElementById('movieCategory').value || 'drama';
+                    movie.description = document.getElementById('movieDescription').value || 'لا يوجد وصف';
+                    movie.image = document.getElementById('movieImage').value;
+                    
+                    storage.saveData();
+                    closeModal();
+                    loadAdminMovies();
+                    loadRecentMovies();
+                    loadHomePage();
+                    
+                    showNotification('تم تحديث الفيلم بنجاح');
+                };
+            }
         }
 
-        // عرض سجلات النظام
-        function viewSystemLogs() {
-            const logs = JSON.parse(localStorage.getItem('accessLogs')) || [];
-            if (logs.length === 0) {
-                alert('لا توجد سجلات في النظام');
-                return;
+        function deleteMovie(movieId) {
+            if (confirm('هل أنت متأكد من حذف هذا الفيلم؟')) {
+                storage.movies = storage.movies.filter(m => m.id !== movieId);
+                storage.saveData();
+                
+                loadAdminMovies();
+                loadRecentMovies();
+                loadAdminStats();
+                loadHomePage();
+                
+                showNotification('تم حذف الفيلم بنجاح');
+            }
+        }
+
+        function adminLogout() {
+            if (confirm('هل تريد تسجيل الخروج من لوحة التحكم؟')) {
+                storage.endSession();
+                showPage('homePage');
+                showNotification('تم تسجيل الخروج بنجاح');
+            }
+        }
+
+        // ============== تهيئة النظام ==============
+        document.addEventListener('DOMContentLoaded', function() {
+            // تحميل البيانات
+            storage.loadData();
+            
+            // إعداد أزرار التنقل
+            document.getElementById('homeBtn').addEventListener('click', () => showPage('homePage'));
+            document.getElementById('adminBtn').addEventListener('click', () => {
+                if (storage.checkSession()) {
+                    showPage('adminDashboardPage');
+                } else {
+                    showPage('adminLoginPage');
+                }
+            });
+            
+            // تحميل الصفحة الرئيسية
+            loadHomePage();
+            
+            // التحقق من الجلسة عند التحميل
+            if (storage.checkSession()) {
+                showPage('adminDashboardPage');
             }
             
-            let logText = 'سجلات النظام:\n\n';
-            logs.slice(-10).reverse().forEach(log => {
-                logText += `${new Date(log.timestamp).toLocaleString('ar-EG')} - ${log.user} (${log.role}): ${log.action}\n`;
+            // إغلاق المودال عند النقر خارجها
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        closeModal();
+                    }
+                });
             });
             
-            alert(logText);
-        }
+            // إغلاق المودال بمفتاح ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+            
+            console.log('🚀 نظام سينما بلس جاهز للعمل!');
+            console.log('👤 للمستخدمين:');
+            console.log('- المسؤول: admin / admin123');
+            console.log('- المشرف: moderator / mod123');
+        });
 
-        // تصدير البيانات
+        // ============== وظائف إضافية ==============
         function exportData() {
             const data = {
-                movies: JSON.parse(localStorage.getItem('moviesDatabase')) || [],
-                users: JSON.parse(localStorage.getItem('registeredUsers')) || [],
-                logs: JSON.parse(localStorage.getItem('accessLogs')) || [],
+                movies: storage.movies,
+                users: storage.users,
                 exportDate: new Date().toISOString()
             };
             
             const dataStr = JSON.stringify(data, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
             
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', `backup-${new Date().getTime()}.json`);
-            linkElement.click();
+            const link = document.createElement('a');
+            link.setAttribute('href', dataUri);
+            link.setAttribute('download', `cinema-backup-${Date.now()}.json`);
+            link.click();
             
-            showAlert('تم تصدير البيانات بنجاح');
+            showNotification('تم تصدير البيانات بنجاح');
         }
 
-        // استيراد البيانات
         function importData() {
             const input = document.createElement('input');
             input.type = 'file';
@@ -778,13 +1624,25 @@
                     try {
                         const data = JSON.parse(e.target.result);
                         
-                        if (data.movies) localStorage.setItem('moviesDatabase', JSON.stringify(data.movies));
-                        if (data.users) localStorage.setItem('registeredUsers', JSON.stringify(data.users));
+                        if (data.movies) {
+                            storage.movies = data.movies;
+                        }
                         
-                        showAlert('تم استيراد البيانات بنجاح');
-                        refreshData();
+                        if (data.users) {
+                            storage.users = data.users;
+                        }
+                        
+                        storage.saveData();
+                        
+                        // تحديث جميع العروض
+                        loadHomePage();
+                        if (document.getElementById('adminDashboardPage').classList.contains('active')) {
+                            loadAdminDashboard();
+                        }
+                        
+                        showNotification('تم استيراد البيانات بنجاح');
                     } catch (error) {
-                        showAlert('خطأ في قراءة الملف', 'error');
+                        showNotification('خطأ في قراءة الملف', 'error');
                     }
                 };
                 reader.readAsText(file);
