@@ -1,0 +1,21 @@
+movie-website/
+├── config/
+│   └── database.php
+├── includes/
+│   ├── header.php
+│   └── footer.php
+├── admin/
+│   ├── dashboard.php
+│   ├── add_movie.php
+│   ├── edit_movie.php
+│   ├── delete_movie.php
+│   └── manage_users.php
+├── uploads/
+│   └── movies/
+├── index.php
+├── login.php
+├── register.php
+├── logout.php
+├── movie-details.php
+├── style.css
+└── script.js
